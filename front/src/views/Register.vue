@@ -1,77 +1,112 @@
 <template>
-    <div class="auth-container">
-        <div class="auth-card">
-            <h2>Inscription</h2>
-
-            <form @submit.prevent="handleRegister">
-                <div class="form-group">
-                    <label for="name">Nom complet</label>
-                    <input
-                        id="name"
-                        v-model="formData.name"
-                        type="text"
-                        required
-                        placeholder="Votre nom"
-                        :disabled="loading"
-                    />
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md">
+            <!-- Card -->
+            <div class="card">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                    >
+                        <span class="text-4xl">🚀</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-shadow-grey-900 mb-2">Créer un compte</h2>
+                    <p class="text-neutral-600">Commencez votre aventure SaaS</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
-                        v-model="formData.email"
-                        type="email"
-                        required
-                        placeholder="votre@email.com"
-                        :disabled="loading"
-                    />
-                </div>
+                <!-- Form -->
+                <form class="space-y-5" @submit.prevent="handleRegister">
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-neutral-700 mb-2">
+                            Nom complet
+                        </label>
+                        <input
+                            id="name"
+                            v-model="formData.name"
+                            type="text"
+                            required
+                            class="input-field"
+                            placeholder="John Doe"
+                            :disabled="loading"
+                        />
+                    </div>
 
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input
-                        id="password"
-                        v-model="formData.password"
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        :disabled="loading"
-                        minlength="8"
-                    />
-                    <small>Minimum 8 caractères</small>
-                </div>
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-neutral-700 mb-2"> Email </label>
+                        <input
+                            id="email"
+                            v-model="formData.email"
+                            type="email"
+                            required
+                            class="input-field"
+                            placeholder="john@example.com"
+                            :disabled="loading"
+                        />
+                    </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">Confirmer le mot de passe</label>
-                    <input
-                        id="confirmPassword"
-                        v-model="formData.confirmPassword"
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        :disabled="loading"
-                        minlength="8"
-                    />
-                </div>
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-neutral-700 mb-2">
+                            Mot de passe
+                        </label>
+                        <input
+                            id="password"
+                            v-model="formData.password"
+                            type="password"
+                            required
+                            class="input-field"
+                            placeholder="••••••••"
+                            :disabled="loading"
+                            minlength="8"
+                        />
+                        <p class="text-xs text-neutral-500 mt-1">Minimum 8 caractères</p>
+                    </div>
 
-                <button type="submit" class="btn btn-primary" :disabled="loading || !isPasswordMatch">
-                    {{ loading ? "Inscription..." : "S'inscrire" }}
-                </button>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-semibold text-neutral-700 mb-2">
+                            Confirmer le mot de passe
+                        </label>
+                        <input
+                            id="confirmPassword"
+                            v-model="formData.confirmPassword"
+                            type="password"
+                            required
+                            class="input-field"
+                            placeholder="••••••••"
+                            :disabled="loading"
+                            minlength="8"
+                        />
+                    </div>
 
-                <div v-if="error" class="alert alert-error">
-                    {{ error }}
-                </div>
+                    <button
+                        type="submit"
+                        class="btn-primary w-full text-lg py-3"
+                        :disabled="loading || !isPasswordMatch"
+                        :class="{ 'opacity-50 cursor-not-allowed': loading || !isPasswordMatch }"
+                    >
+                        {{ loading ? "Inscription..." : "S'inscrire" }}
+                    </button>
 
-                <div v-if="!isPasswordMatch && formData.confirmPassword" class="alert alert-warning">
-                    Les mots de passe ne correspondent pas
-                </div>
-            </form>
+                    <!-- Errors & Warnings -->
+                    <div v-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                        {{ error }}
+                    </div>
 
-            <p class="switch-auth">
-                Déjà un compte ?
-                <router-link to="/login">Se connecter</router-link>
-            </p>
+                    <div
+                        v-if="!isPasswordMatch && formData.confirmPassword"
+                        class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm"
+                    >
+                        Les mots de passe ne correspondent pas
+                    </div>
+                </form>
+
+                <!-- Footer -->
+                <p class="mt-6 text-center text-neutral-600">
+                    Déjà un compte ?
+                    <router-link to="/login" class="font-semibold text-primary hover:text-primary-700">
+                        Se connecter
+                    </router-link>
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -119,125 +154,3 @@ const handleRegister = async () => {
     loading.value = false;
 };
 </script>
-
-<style scoped>
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 4rem);
-    padding: 2rem;
-}
-
-.auth-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-h2 {
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: #111827;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-small {
-    display: block;
-    margin-top: 0.25rem;
-    color: #6b7280;
-    font-size: 0.875rem;
-}
-
-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    transition: all 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-input:disabled {
-    background: #f3f4f6;
-    cursor: not-allowed;
-}
-
-.btn {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.alert {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-}
-
-.alert-error {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}
-
-.alert-warning {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fde68a;
-}
-
-.switch-auth {
-    margin-top: 1.5rem;
-    text-align: center;
-    color: #6b7280;
-}
-
-.switch-auth a {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.switch-auth a:hover {
-    text-decoration: underline;
-}
-</style>

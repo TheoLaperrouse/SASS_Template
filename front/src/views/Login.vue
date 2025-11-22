@@ -1,47 +1,71 @@
 <template>
-    <div class="auth-container">
-        <div class="auth-card">
-            <h2>Connexion</h2>
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md">
+            <!-- Card -->
+            <div class="card">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <div
+                        class="w-16 h-16 bg-linear-to-br from-primary to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                    >
+                        <span class="text-4xl">👋</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-shadow-grey-900 mb-2">Bon retour !</h2>
+                    <p class="text-neutral-600">Connectez-vous à votre compte</p>
+                </div>
 
-            <form @submit.prevent="handleLogin">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
-                        v-model="formData.email"
-                        type="email"
-                        required
-                        placeholder="votre@email.com"
+                <!-- Form -->
+                <form class="space-y-5" @submit.prevent="handleLogin">
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-neutral-700 mb-2"> Email </label>
+                        <input
+                            id="email"
+                            v-model="formData.email"
+                            type="email"
+                            required
+                            class="input-field"
+                            placeholder="votre@email.com"
+                            :disabled="loading"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-neutral-700 mb-2">
+                            Mot de passe
+                        </label>
+                        <input
+                            id="password"
+                            v-model="formData.password"
+                            type="password"
+                            required
+                            class="input-field"
+                            placeholder="••••••••"
+                            :disabled="loading"
+                            minlength="8"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-primary w-full text-lg py-3"
                         :disabled="loading"
-                    />
-                </div>
+                        :class="{ 'opacity-50 cursor-not-allowed': loading }"
+                    >
+                        {{ loading ? "Connexion..." : "Se connecter" }}
+                    </button>
 
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input
-                        id="password"
-                        v-model="formData.password"
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        :disabled="loading"
-                        minlength="8"
-                    />
-                </div>
+                    <div v-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                        {{ error }}
+                    </div>
+                </form>
 
-                <button type="submit" class="btn btn-primary" :disabled="loading">
-                    {{ loading ? "Connexion..." : "Se connecter" }}
-                </button>
-
-                <div v-if="error" class="alert alert-error">
-                    {{ error }}
-                </div>
-            </form>
-
-            <p class="switch-auth">
-                Pas de compte ?
-                <router-link to="/register">S'inscrire</router-link>
-            </p>
+                <p class="mt-6 text-center text-neutral-600">
+                    Pas encore de compte ?
+                    <router-link to="/register" class="font-semibold text-primary hover:text-primary-700">
+                        S'inscrire
+                    </router-link>
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -70,7 +94,6 @@ const handleLogin = async () => {
     const result = await login(formData.email, formData.password);
 
     if (result.success) {
-        // Rediriger vers la page demandée ou dashboard
         const redirect = (route.query.redirect as string) || "/dashboard";
         router.push(redirect);
     } else {
@@ -80,112 +103,3 @@ const handleLogin = async () => {
     loading.value = false;
 };
 </script>
-
-<style scoped>
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 4rem);
-    padding: 2rem;
-}
-
-.auth-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-h2 {
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: #111827;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #374151;
-}
-
-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    transition: all 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-input:disabled {
-    background: #f3f4f6;
-    cursor: not-allowed;
-}
-
-.btn {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-    background: #2563eb;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.alert {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-}
-
-.alert-error {
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}
-
-.switch-auth {
-    margin-top: 1.5rem;
-    text-align: center;
-    color: #6b7280;
-}
-
-.switch-auth a {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.switch-auth a:hover {
-    text-decoration: underline;
-}
-</style>

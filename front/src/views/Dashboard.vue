@@ -1,256 +1,150 @@
 <template>
-    <div class="dashboard">
-        <div class="dashboard-header">
-            <h1>Tableau de bord</h1>
-            <button class="btn btn-logout" :disabled="loading" @click="handleLogout">
-                {{ loading ? "Déconnexion..." : "Se déconnecter" }}
-            </button>
-        </div>
+    <div class="min-h-[calc(100vh-4rem)] py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-shadow-grey-900 mb-3">Tableau de bord</h1>
+                <p class="text-xl text-neutral-600">Bienvenue sur votre espace personnel</p>
+            </div>
 
-        <div v-if="isLoading" class="loading">
-            <div class="spinner"></div>
-            <p>Chargement...</p>
-        </div>
+            <!-- Loading -->
+            <div v-if="isLoading" class="flex items-center justify-center py-20">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"
+                    ></div>
+                    <p class="text-neutral-600">Chargement...</p>
+                </div>
+            </div>
 
-        <div v-else-if="user" class="content">
-            <div class="welcome-card">
-                <h2>Bienvenue, {{ user.name }} ! 👋</h2>
-                <div class="user-info">
-                    <div class="info-item">
-                        <span class="label">Email:</span>
-                        <span class="value">{{ user.email }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">ID:</span>
-                        <span class="value">{{ user.id }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Email vérifié:</span>
-                        <span class="value">
-                            <span :class="user.emailVerified ? 'badge-success' : 'badge-warning'">
-                                {{ user.emailVerified ? "✓ Vérifié" : "⚠ Non vérifié" }}
-                            </span>
+            <!-- Content -->
+            <div v-else-if="user" class="space-y-8">
+                <!-- Welcome Card -->
+                <div class="card bg-gradient-to-br from-primary-50 to-amethyst-smoke-50 border border-primary-100">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold text-shadow-grey-900 mb-2">
+                                Bienvenue, {{ user.name }} ! 👋
+                            </h2>
+                            <p class="text-neutral-600 text-lg">Votre compte est actif et prêt à l'emploi</p>
+                        </div>
+                        <span
+                            v-if="user.emailVerified"
+                            class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold"
+                        >
+                            ✓ Vérifié
+                        </span>
+                        <span
+                            v-else
+                            class="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold"
+                        >
+                            ⚠ Non vérifié
                         </span>
                     </div>
                 </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card hover:scale-105 transition-transform">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">
+                                Statut du compte
+                            </h3>
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-primary to-primary-600 rounded-xl flex items-center justify-center"
+                            >
+                                <span class="text-xl">✓</span>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-shadow-grey-900">Actif</p>
+                    </div>
+
+                    <div class="card hover:scale-105 transition-transform">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Email</h3>
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-secondary to-secondary-600 rounded-xl flex items-center justify-center"
+                            >
+                                <span class="text-xl">📧</span>
+                            </div>
+                        </div>
+                        <p class="text-lg font-semibold text-shadow-grey-900 truncate">
+                            {{ user.email }}
+                        </p>
+                    </div>
+
+                    <div class="card hover:scale-105 transition-transform">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-semibold text-neutral-600 uppercase tracking-wide">
+                                Membre depuis
+                            </h3>
+                            <div
+                                class="w-10 h-10 bg-gradient-to-br from-accent to-accent-600 rounded-xl flex items-center justify-center"
+                            >
+                                <span class="text-xl">📅</span>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold text-shadow-grey-900">Récemment</p>
+                    </div>
+                </div>
+
+                <!-- User Info Card -->
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-shadow-grey-900 mb-6">Informations du compte</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between py-3 border-b border-neutral-100">
+                            <span class="font-semibold text-neutral-700">Nom</span>
+                            <span class="text-neutral-900">{{ user.name }}</span>
+                        </div>
+                        <div class="flex items-center justify-between py-3 border-b border-neutral-100">
+                            <span class="font-semibold text-neutral-700">Email</span>
+                            <span class="text-neutral-900">{{ user.email }}</span>
+                        </div>
+                        <div class="flex items-center justify-between py-3 border-b border-neutral-100">
+                            <span class="font-semibold text-neutral-700">ID utilisateur</span>
+                            <code class="text-sm bg-neutral-100 px-3 py-1 rounded font-mono">
+                                {{ user.id }}
+                            </code>
+                        </div>
+                        <div class="flex items-center justify-between py-3">
+                            <span class="font-semibold text-neutral-700">Email vérifié</span>
+                            <span v-if="user.emailVerified" class="badge-primary"> ✓ Vérifié </span>
+                            <span
+                                v-else
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800"
+                            >
+                                ⚠ Non vérifié
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-2xl font-bold text-shadow-grey-900 mb-6">Actions rapides</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button class="btn-primary text-left flex items-center justify-between group">
+                            <span>Modifier le profil</span>
+                            <span class="group-hover:translate-x-1 transition-transform">→</span>
+                        </button>
+                        <button class="btn-outline text-left flex items-center justify-between group">
+                            <span>Paramètres</span>
+                            <span class="group-hover:translate-x-1 transition-transform">→</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Statut</h3>
-                    <p class="stat-value">Connecté</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Compte créé</h3>
-                    <p class="stat-value">Récemment</p>
-                </div>
+            <div v-else class="card text-center py-12">
+                <span class="text-6xl mb-4 block">😕</span>
+                <h3 class="text-2xl font-bold text-shadow-grey-900 mb-2">Erreur de chargement</h3>
+                <p class="text-neutral-600">Impossible de charger les informations utilisateur</p>
             </div>
-        </div>
-
-        <div v-else class="error">
-            <p>Erreur lors du chargement des données utilisateur</p>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useAuth } from "../composables/useAuth";
 
-const { user, isLoading, logout } = useAuth();
-const loading = ref(false);
-
-const handleLogout = async () => {
-    loading.value = true;
-    await logout();
-    loading.value = false;
-};
+const { user, isLoading } = useAuth();
 </script>
-
-<style scoped>
-.dashboard {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.dashboard-header h1 {
-    font-size: 2rem;
-    color: #111827;
-}
-
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: all 0.2s;
-}
-
-.btn-logout {
-    background: #ef4444;
-    color: white;
-}
-
-.btn-logout:hover:not(:disabled) {
-    background: #dc2626;
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem 2rem;
-    text-align: center;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid #f3f4f6;
-    border-top: 4px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.welcome-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-card h2 {
-    margin-bottom: 1.5rem;
-    color: #111827;
-    font-size: 1.5rem;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background: #f9fafb;
-    border-radius: 0.375rem;
-}
-
-.label {
-    font-weight: 600;
-    color: #6b7280;
-}
-
-.value {
-    color: #111827;
-    font-family: monospace;
-}
-
-.badge-success {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: #d1fae5;
-    color: #065f46;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.badge-warning {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: #fef3c7;
-    color: #92400e;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-}
-
-.stat-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.stat-card h3 {
-    color: #6b7280;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-}
-
-.stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #111827;
-}
-
-.error {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 1rem;
-    border-radius: 0.375rem;
-    text-align: center;
-}
-
-@media (max-width: 768px) {
-    .dashboard {
-        padding: 1rem;
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .info-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-}
-</style>

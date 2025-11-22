@@ -1,42 +1,196 @@
 <template>
     <div class="home">
-        <div class="hero">
-            <h1>Bienvenue sur l'application</h1>
-            <p class="subtitle">Gérez votre compte en toute sécurité avec Better Auth</p>
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto text-center">
+                <div
+                    v-if="isAuthenticated"
+                    class="inline-flex items-center px-4 py-2 bg-primary-50 border border-primary-200 rounded-full mb-8 animate-fade-in"
+                >
+                    <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                    <span class="text-sm font-medium text-primary-800">
+                        Connecté en tant que <strong>{{ user?.name }}</strong>
+                    </span>
+                </div>
 
-            <div v-if="isAuthenticated" class="authenticated-actions">
-                <p class="welcome-text">
-                    Vous êtes connecté en tant que <strong>{{ user?.name }}</strong>
+                <h1 class="text-5xl md:text-7xl font-bold text-shadow-grey-900 mb-6 leading-tight">
+                    Créez votre
+                    <span class="text-gradient-primary">SaaS</span>
+                    <br />
+                    en quelques minutes
+                </h1>
+
+                <p class="text-xl md:text-2xl text-neutral-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                    Template moderne avec Vue 3, TypeScript, Better Auth et Tailwind CSS v4. Tout ce dont vous avez
+                    besoin pour démarrer rapidement.
                 </p>
-                <router-link to="/dashboard" class="btn btn-primary"> Accéder au dashboard </router-link>
-            </div>
 
-            <div v-else class="guest-actions">
-                <router-link to="/login" class="btn btn-secondary"> Se connecter </router-link>
-                <router-link to="/register" class="btn btn-primary"> Créer un compte </router-link>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <router-link
+                        v-if="!isAuthenticated"
+                        to="/register"
+                        class="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
+                    >
+                        Commencer gratuitement
+                        <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </router-link>
+                    <router-link
+                        v-else
+                        to="/dashboard"
+                        class="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
+                    >
+                        Accéder au dashboard
+                        <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </router-link>
+                    <a
+                        href="https://github.com/votre-repo"
+                        class="btn-outline text-lg px-8 py-4 inline-flex items-center justify-center"
+                        target="_blank"
+                    >
+                        <span class="mr-2">⭐</span>
+                        Voir sur GitHub
+                    </a>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="features">
-            <h2>Fonctionnalités</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
-                    <h3>Sécurisé</h3>
-                    <p>Authentification robuste avec Better Auth</p>
+        <!-- Features Section -->
+        <section class="py-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-shadow-grey-900 mb-4">Fonctionnalités puissantes</h2>
+                    <p class="text-xl text-neutral-600">
+                        Tout ce dont vous avez besoin pour créer une application moderne
+                    </p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Rapide</h3>
-                    <p>Interface réactive avec Vue 3</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Moderne</h3>
-                    <p>Design élégant et intuitif</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-primary to-primary-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">🔐</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Authentification sécurisée</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            Better Auth intégré avec gestion des sessions, protection CSRF et support OAuth.
+                        </p>
+                        <span class="badge-primary">Better Auth</span>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">⚡</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Ultra performant</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            Vue 3 avec Vite pour un hot reload instantané et un build ultra-rapide.
+                        </p>
+                        <span class="badge-secondary">Vue 3 + Vite</span>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-accent to-accent-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">🎨</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Design moderne</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            Tailwind CSS v4 avec une palette personnalisée élégante et harmonieuse.
+                        </p>
+                        <span class="badge-accent">Tailwind v4</span>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-amethyst-smoke-400 to-amethyst-smoke-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">🗄️</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Base de données moderne</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            PostgreSQL avec Drizzle ORM pour une gestion type-safe de vos données.
+                        </p>
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amethyst-smoke-100 text-amethyst-smoke-800"
+                        >
+                            Drizzle ORM
+                        </span>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-dark-teal-400 to-dark-teal-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">🐳</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Prêt pour Docker</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            Configuration Docker Compose complète pour un déploiement simplifié.
+                        </p>
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-dark-teal-100 text-dark-teal-800"
+                        >
+                            Docker
+                        </span>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="card group hover:scale-105 transition-all duration-300">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-sandy-clay-400 to-sandy-clay-600 rounded-2xl flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform"
+                        >
+                            <span class="text-4xl">✨</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-shadow-grey-900 mb-3">Code quality</h3>
+                        <p class="text-neutral-600 leading-relaxed mb-4">
+                            ESLint, Prettier et TypeScript pour un code propre et maintenable.
+                        </p>
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sandy-clay-100 text-sandy-clay-800"
+                        >
+                            TypeScript
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <div
+                    class="card text-center bg-gradient-to-br from-primary-50 to-amethyst-smoke-50 border border-primary-100"
+                >
+                    <h2 class="text-4xl font-bold text-shadow-grey-900 mb-4">Prêt à démarrer ?</h2>
+                    <p class="text-xl text-neutral-600 mb-8 max-w-2xl mx-auto">
+                        Créez votre compte gratuitement et commencez à développer votre SaaS dès maintenant.
+                    </p>
+                    <router-link
+                        v-if="!isAuthenticated"
+                        to="/register"
+                        class="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center"
+                    >
+                        Créer un compte gratuitement
+                    </router-link>
+                    <router-link
+                        v-else
+                        to="/dashboard"
+                        class="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center"
+                    >
+                        Aller au dashboard
+                    </router-link>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -45,148 +199,3 @@ import { useAuth } from "../composables/useAuth";
 
 const { isAuthenticated, user } = useAuth();
 </script>
-
-<style scoped>
-.home {
-    padding: 2rem;
-}
-
-.hero {
-    text-align: center;
-    padding: 4rem 2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: #111827;
-    line-height: 1.2;
-}
-
-.subtitle {
-    font-size: 1.25rem;
-    color: #6b7280;
-    margin-bottom: 2rem;
-}
-
-.guest-actions,
-.authenticated-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.authenticated-actions {
-    flex-direction: column;
-    align-items: center;
-}
-
-.welcome-text {
-    font-size: 1.125rem;
-    color: #374151;
-    margin-bottom: 1rem;
-}
-
-.welcome-text strong {
-    color: #3b82f6;
-}
-
-.btn {
-    padding: 0.875rem 2rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.2s;
-    display: inline-block;
-}
-
-.btn-secondary {
-    background: #f3f4f6;
-    color: #374151;
-    border: 2px solid #d1d5db;
-}
-
-.btn-secondary:hover {
-    background: #e5e7eb;
-    border-color: #9ca3af;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-    border: 2px solid #3b82f6;
-}
-
-.btn-primary:hover {
-    background: #2563eb;
-    border-color: #2563eb;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.features {
-    max-width: 1200px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-}
-
-.features h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    color: #111827;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.feature-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: all 0.2s;
-}
-
-.feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    color: #111827;
-}
-
-.feature-card p {
-    color: #6b7280;
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
-    }
-
-    .subtitle {
-        font-size: 1rem;
-    }
-
-    .hero {
-        padding: 2rem 1rem;
-    }
-}
-</style>
