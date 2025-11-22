@@ -1,24 +1,24 @@
 <template>
     <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
-            <!-- Card -->
             <div class="card">
-                <!-- Header -->
                 <div class="text-center mb-8">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-secondary to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
+                        class="w-16 h-16 bg-linear-to-br from-secondary to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4"
                     >
                         <span class="text-4xl">🚀</span>
                     </div>
-                    <h2 class="text-3xl font-bold text-shadow-grey-900 mb-2">Créer un compte</h2>
-                    <p class="text-neutral-600">Commencez votre aventure SaaS</p>
+                    <h2 class="text-3xl font-bold text-shadow-grey-900 mb-2">
+                        {{ t("auth.register.title") }}
+                    </h2>
+                    <p class="text-neutral-600">
+                        {{ t("auth.register.subtitle") }}
+                    </p>
                 </div>
-
-                <!-- Form -->
                 <form class="space-y-5" @submit.prevent="handleRegister">
                     <div>
                         <label for="name" class="block text-sm font-semibold text-neutral-700 mb-2">
-                            Nom complet
+                            {{ t("auth.register.name") }}
                         </label>
                         <input
                             id="name"
@@ -26,27 +26,29 @@
                             type="text"
                             required
                             class="input-field"
-                            placeholder="John Doe"
+                            :placeholder="t('auth.register.name')"
                             :disabled="loading"
                         />
                     </div>
 
                     <div>
-                        <label for="email" class="block text-sm font-semibold text-neutral-700 mb-2"> Email </label>
+                        <label for="email" class="block text-sm font-semibold text-neutral-700 mb-2">
+                            {{ t("auth.register.email") }}
+                        </label>
                         <input
                             id="email"
                             v-model="formData.email"
                             type="email"
                             required
                             class="input-field"
-                            placeholder="john@example.com"
+                            :placeholder="t('auth.register.email')"
                             :disabled="loading"
                         />
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-semibold text-neutral-700 mb-2">
-                            Mot de passe
+                            {{ t("auth.register.password") }}
                         </label>
                         <input
                             id="password"
@@ -58,12 +60,14 @@
                             :disabled="loading"
                             minlength="8"
                         />
-                        <p class="text-xs text-neutral-500 mt-1">Minimum 8 caractères</p>
+                        <p class="text-xs text-neutral-500 mt-1">
+                            {{ t("auth.register.passwordHint") }}
+                        </p>
                     </div>
 
                     <div>
                         <label for="confirmPassword" class="block text-sm font-semibold text-neutral-700 mb-2">
-                            Confirmer le mot de passe
+                            {{ t("auth.register.confirmPassword") }}
                         </label>
                         <input
                             id="confirmPassword"
@@ -81,13 +85,10 @@
                         type="submit"
                         class="btn-primary w-full text-lg py-3"
                         :disabled="loading || !isPasswordMatch"
-                        :class="{ 'opacity-50 cursor-not-allowed': loading || !isPasswordMatch }"
                     >
-                        {{ loading ? "Inscription..." : "S'inscrire" }}
+                        {{ loading ? t("auth.register.submitting") : t("auth.register.submit") }}
                     </button>
-
-                    <!-- Errors & Warnings -->
-                    <div v-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                    <div v-if="error" class="alert-error">
                         {{ error }}
                     </div>
 
@@ -95,15 +96,13 @@
                         v-if="!isPasswordMatch && formData.confirmPassword"
                         class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm"
                     >
-                        Les mots de passe ne correspondent pas
+                        {{ t("auth.register.passwordMismatch") }}
                     </div>
                 </form>
-
-                <!-- Footer -->
                 <p class="mt-6 text-center text-neutral-600">
-                    Déjà un compte ?
+                    {{ t("auth.register.hasAccount") }}
                     <router-link to="/login" class="font-semibold text-primary hover:text-primary-700">
-                        Se connecter
+                        {{ t("auth.register.signin") }}
                     </router-link>
                 </p>
             </div>
@@ -115,9 +114,11 @@
 import { ref, reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../composables/useAuth";
+import { useI18n } from "../composables/useI18n";
 
 const router = useRouter();
 const { register } = useAuth();
+const { t } = useI18n();
 
 const loading = ref(false);
 const error = ref("");
@@ -136,7 +137,7 @@ const isPasswordMatch = computed(() => {
 
 const handleRegister = async () => {
     if (!isPasswordMatch.value) {
-        error.value = "Les mots de passe ne correspondent pas";
+        error.value = t("auth.register.passwordMismatch");
         return;
     }
 
@@ -148,7 +149,7 @@ const handleRegister = async () => {
     if (result.success) {
         router.push("/dashboard");
     } else {
-        error.value = result.error || "Erreur lors de l'inscription";
+        error.value = result.error || t("auth.register.error");
     }
 
     loading.value = false;
