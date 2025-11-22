@@ -1,0 +1,44 @@
+{
+  "name": "sass",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "back",
+    "front"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheoLaperrouse/SASS_Template.git"
+  },
+  "scripts": {
+    "dev": "concurrently -n \"BACK,FRONT\" -c \"bgBlue.bold,bgGreen.bold\" \"cd back && yarn dev\" \"cd front && yarn dev\"",
+    "install:all": "cd back && yarn install && cd ../front && yarn install",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.2",
+    "@semantic-release/npm": "^13.1.2",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "semantic-release": "^25.0.2"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
+    ]
+  }
+}

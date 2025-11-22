@@ -1,0 +1,5 @@
+**/.env
+node_modules
+.semantic-release/
+CHANGELOG.md
+**/dist
